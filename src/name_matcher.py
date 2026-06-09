@@ -4,20 +4,8 @@ class NameMatcher:
 
     @staticmethod
     def are_equivalent(name_a: str, name_b: str) -> bool:
-        tokens_a = [
-            token.lower()
-            for token in name_a.split()
-            if token.lower() not in NameMatcher.PARTICLES
-        ]
-
-        tokens_b = [
-            token.lower()
-            for token in name_b.split()
-            if token.lower() not in NameMatcher.PARTICLES
-        ]
-
-        if len(tokens_a) < 2 or len(tokens_b) < 2:
-            return False
+        tokens_a = NameMatcher._tokens_without_particles(name_a)
+        tokens_b = NameMatcher._tokens_without_particles(name_b)
 
         if NameMatcher._matches_surname_with_initials(
             tokens_a,
@@ -34,10 +22,26 @@ class NameMatcher:
         return False
 
     @staticmethod
+    def _tokens_without_particles(name: str) -> list[str]:
+        tokens = name.split()
+
+        return [
+            token.lower()
+            for token in tokens
+            if token.lower() not in NameMatcher.PARTICLES
+        ]
+
+    @staticmethod
     def _matches_surname_with_initials(
         abbreviated_tokens: list[str],
         full_name_tokens: list[str]
     ) -> bool:
+        if len(abbreviated_tokens) < 2:
+            return False
+
+        if len(full_name_tokens) < 2:
+            return False
+
         surname = abbreviated_tokens[0]
         initials = abbreviated_tokens[1:]
 
@@ -50,7 +54,10 @@ class NameMatcher:
         if len(initials) != len(full_given_names):
             return False
 
-        for initial, full_name in zip(initials, full_given_names):
+        for initial, full_name in zip(
+            initials,
+            full_given_names
+        ):
             if len(initial) != 1:
                 return False
 
