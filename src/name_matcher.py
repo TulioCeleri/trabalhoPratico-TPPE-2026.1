@@ -7,6 +7,9 @@ class NameMatcher:
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
+        if tokens_a == tokens_b:
+            return True
+
         if NameMatcher._matches_surname_with_initials(
             tokens_a,
             tokens_b
