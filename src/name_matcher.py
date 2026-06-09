@@ -25,10 +25,15 @@ class NameMatcher:
     def _tokens_without_particles(name: str) -> list[str]:
         tokens = name.split()
 
-        return [
-            token.lower()
+        normalized_tokens = [
+            token.lower().replace(".", "")
             for token in tokens
-            if token.lower() not in NameMatcher.PARTICLES
+        ]
+
+        return [
+            token
+            for token in normalized_tokens
+            if token not in NameMatcher.PARTICLES
         ]
 
     @staticmethod
