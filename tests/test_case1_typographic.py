@@ -1,3 +1,5 @@
+import pytest
+
 from src.name_normalizer import NameNormalizer
 
 
@@ -29,3 +31,9 @@ def test_remove_extra_spaces():
         ==
         "Monica Hirata Sant'Anna"
     )
+
+
+def test_empty_name():
+
+    with pytest.raises(ValueError):
+        NameNormalizer.normalize("")
