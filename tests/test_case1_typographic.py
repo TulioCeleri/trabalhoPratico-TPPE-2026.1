@@ -19,3 +19,13 @@ def test_replace_curly_apostrophe():
         ==
         "Monica Hirata Sant'Anna"
     )
+
+
+def test_remove_extra_spaces():
+    assert (
+        NameNormalizer.normalize(
+            "Monica    Hirata    Sant`anna"
+        )
+        ==
+        "Monica Hirata Sant'Anna"
+    )
