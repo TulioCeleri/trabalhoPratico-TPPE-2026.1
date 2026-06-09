@@ -2,4 +2,8 @@ class NameNormalizer:
 
     @staticmethod
     def normalize(name: str) -> str:
-        return name.replace("`", "'").title()
+
+        normalized = name.replace("`", "'")
+        normalized = normalized.replace("’", "'")
+
+        return normalized.title()
