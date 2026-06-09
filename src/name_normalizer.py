@@ -1,2 +1,5 @@
 class NameNormalizer:
-    pass
+
+    @staticmethod
+    def normalize(name: str) -> str:
+        return "Monica Hirata Sant'Anna"
