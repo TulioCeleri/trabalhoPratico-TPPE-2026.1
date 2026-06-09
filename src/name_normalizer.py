@@ -6,4 +6,8 @@ class NameNormalizer:
         normalized = name.replace("`", "'")
         normalized = normalized.replace("’", "'")
 
+        normalized = " ".join(
+            normalized.split()
+        )
+
         return normalized.title()
