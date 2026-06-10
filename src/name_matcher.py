@@ -4,6 +4,9 @@ class NameMatcher:
 
     @staticmethod
     def are_equivalent(name_a: str, name_b: str) -> bool:
+        if not name_a or not name_b:
+            raise ValueError("Nomes não podem ser vazios")
+
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
