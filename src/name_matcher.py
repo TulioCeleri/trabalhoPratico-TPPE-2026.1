@@ -4,31 +4,27 @@ class NameMatcher:
 
     @staticmethod
     def are_equivalent(name_a: str, name_b: str) -> bool:
-        if not name_a or not name_b:
-            raise ValueError("Nomes não podem ser vazios")
+        NameMatcher._validate_names(name_a, name_b)
 
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
-        if NameMatcher._same_tokens_or_initials(
-            tokens_a,
-            tokens_b
-        ):
-            return True
+        return (
+            NameMatcher._same_tokens_or_initials(
+                tokens_a,
+                tokens_b
+            )
+            or
+            NameMatcher._matches_surname_with_initials_in_any_order(
+                tokens_a,
+                tokens_b
+            )
+        )
 
-        if NameMatcher._matches_surname_with_initials(
-            tokens_a,
-            tokens_b
-        ):
-            return True
-
-        if NameMatcher._matches_surname_with_initials(
-            tokens_b,
-            tokens_a
-        ):
-            return True
-
-        return False
+    @staticmethod
+    def _validate_names(name_a: str, name_b: str) -> None:
+        if not name_a or not name_b:
+            raise ValueError("Nomes não podem ser vazios")
 
     @staticmethod
     def _tokens_without_particles(name: str) -> list[str]:
@@ -69,6 +65,23 @@ class NameMatcher:
             return False
 
         return True
+
+    @staticmethod
+    def _matches_surname_with_initials_in_any_order(
+        tokens_a: list[str],
+        tokens_b: list[str]
+    ) -> bool:
+        return (
+            NameMatcher._matches_surname_with_initials(
+                tokens_a,
+                tokens_b
+            )
+            or
+            NameMatcher._matches_surname_with_initials(
+                tokens_b,
+                tokens_a
+            )
+        )
 
     @staticmethod
     def _matches_surname_with_initials(
