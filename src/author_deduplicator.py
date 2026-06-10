@@ -15,13 +15,25 @@ class AuthorDeduplicator:
             first_author.name,
             second_author.name
         ):
-            if (
-                first_author.author_id
-                <=
-                second_author.author_id
-            ):
-                return [first_author]
-
-            return [second_author]
+            return [
+                AuthorDeduplicator._author_with_smallest_id(
+                    first_author,
+                    second_author
+                )
+            ]
 
         return authors
+
+    @staticmethod
+    def _author_with_smallest_id(
+        first_author,
+        second_author
+    ):
+        if (
+            first_author.author_id
+            <=
+            second_author.author_id
+        ):
+            return first_author
+
+        return second_author
