@@ -9,15 +9,9 @@ class NameMatcher:
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
-        if NameMatcher._matches_grouped_initials(
+        if NameMatcher._matches_grouped_initials_in_any_order(
             tokens_a,
             tokens_b
-        ):
-            return True
-
-        if NameMatcher._matches_grouped_initials(
-            tokens_b,
-            tokens_a
         ):
             return True
 
@@ -52,6 +46,23 @@ class NameMatcher:
             for token in normalized_tokens
             if token not in NameMatcher.PARTICLES
         ]
+
+    @staticmethod
+    def _matches_grouped_initials_in_any_order(
+        tokens_a: list[str],
+        tokens_b: list[str]
+    ) -> bool:
+        return (
+            NameMatcher._matches_grouped_initials(
+                tokens_a,
+                tokens_b
+            )
+            or
+            NameMatcher._matches_grouped_initials(
+                tokens_b,
+                tokens_a
+            )
+        )
 
     @staticmethod
     def _matches_grouped_initials(
