@@ -35,9 +35,21 @@ class NameMatcher:
             for token in tokens
         ]
 
+        expanded_tokens = []
+
+        for token in normalized_tokens:
+            if (
+                len(token) == 2
+                and token.isalpha()
+                and token.isupper() is False
+            ):
+                expanded_tokens.extend(list(token))
+            else:
+                expanded_tokens.append(token)
+
         return [
             token
-            for token in normalized_tokens
+            for token in expanded_tokens
             if token not in NameMatcher.PARTICLES
         ]
 
@@ -49,10 +61,7 @@ class NameMatcher:
         if len(tokens_a) != len(tokens_b):
             return False
 
-        for token_a, token_b in zip(
-            tokens_a,
-            tokens_b
-        ):
+        for token_a, token_b in zip(tokens_a, tokens_b):
             if token_a == token_b:
                 continue
 
