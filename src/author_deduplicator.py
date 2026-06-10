@@ -5,24 +5,52 @@ class AuthorDeduplicator:
 
     @staticmethod
     def deduplicate(authors):
-        if len(authors) < 2:
-            return authors
+        deduplicated_authors = []
 
-        first_author = authors[0]
-        second_author = authors[1]
-
-        if NameMatcher.are_equivalent(
-            first_author.name,
-            second_author.name
-        ):
-            return [
-                AuthorDeduplicator._author_with_smallest_id(
-                    first_author,
-                    second_author
+        for author in authors:
+            duplicate_index = (
+                AuthorDeduplicator._find_duplicate(
+                    author,
+                    deduplicated_authors
                 )
-            ]
+            )
 
-        return authors
+            if duplicate_index == -1:
+                deduplicated_authors.append(author)
+            else:
+                existing_author = (
+                    deduplicated_authors[
+                        duplicate_index
+                    ]
+                )
+
+                deduplicated_authors[
+                    duplicate_index
+                ] = (
+                    AuthorDeduplicator
+                    ._author_with_smallest_id(
+                        existing_author,
+                        author
+                    )
+                )
+
+        return deduplicated_authors
+
+    @staticmethod
+    def _find_duplicate(
+        author,
+        deduplicated_authors
+    ):
+        for index, existing_author in enumerate(
+            deduplicated_authors
+        ):
+            if NameMatcher.are_equivalent(
+                author.name,
+                existing_author.name
+            ):
+                return index
+
+        return -1
 
     @staticmethod
     def _author_with_smallest_id(
