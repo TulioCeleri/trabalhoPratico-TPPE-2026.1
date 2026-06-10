@@ -27,11 +27,16 @@ O desenvolvimento é realizado de forma incremental, seguindo o ciclo:
 trabalhoPratico-TPPE-2026.1/
 │
 ├── src/
+│   ├── __init__.py
 │   ├── author_record.py
-│   └── name_normalizer.py
+│   ├── name_normalizer.py
+│   └── name_matcher.py
 │
 ├── tests/
-│   └── test_case1_typographic.py
+│   ├── __init__.py
+│   ├── test_case1_typographic.py
+│   ├── test_case2_surname_initials.py
+│   └── test_case3_particles.py
 │
 ├── pytest.ini
 ├── requirements.txt
@@ -103,3 +108,39 @@ A classe `NameNormalizer` realiza:
 - Remoção de espaços extras
 - Remoção de espaços nas extremidades
 - Padronização de capitalização dos nomes
+
+### Caso 2 - Sobrenome com iniciais
+
+Implementado na classe `NameMatcher`.
+
+A classe identifica equivalência entre nome completo e versões abreviadas no formato:
+
+```text
+Sobrenome + iniciais
+```
+
+Exemplos tratados:
+
+```text
+Seabra A M == Ana de Mattos Seabra
+Souza C. == Cassius de Souza
+```
+
+### Caso 3 - Partículas opcionais e abreviações
+
+Implementado na classe `NameMatcher`.
+
+A classe considera opcionais partículas como:
+
+```text
+de, da, do, dos, das
+```
+
+Também permite que abreviações com ponto sejam comparadas com nomes completos.
+
+Exemplos tratados:
+
+```text
+Luiz Oliveira Souza == Luiz de Oliveira de Souza
+Luiz de O. de Souza == Luiz de Oliveira de Souza
+```
