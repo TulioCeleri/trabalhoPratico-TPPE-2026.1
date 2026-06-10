@@ -1,10 +1,13 @@
+from src.author_record import AuthorRecord
 from src.name_matcher import NameMatcher
 
 
 class AuthorDeduplicator:
 
     @staticmethod
-    def deduplicate(authors):
+    def deduplicate(
+        authors: list[AuthorRecord]
+    ) -> list[AuthorRecord]:
         deduplicated_authors = []
 
         for author in authors:
@@ -17,9 +20,9 @@ class AuthorDeduplicator:
 
     @staticmethod
     def _add_author(
-        author,
-        deduplicated_authors
-    ):
+        author: AuthorRecord,
+        deduplicated_authors: list[AuthorRecord]
+    ) -> None:
         duplicate_index = (
             AuthorDeduplicator._find_duplicate(
                 author,
@@ -49,9 +52,9 @@ class AuthorDeduplicator:
 
     @staticmethod
     def _find_duplicate(
-        author,
-        deduplicated_authors
-    ):
+        author: AuthorRecord,
+        deduplicated_authors: list[AuthorRecord]
+    ) -> int:
         for index, existing_author in enumerate(
             deduplicated_authors
         ):
@@ -65,9 +68,9 @@ class AuthorDeduplicator:
 
     @staticmethod
     def _author_with_smallest_id(
-        first_author,
-        second_author
-    ):
+        first_author: AuthorRecord,
+        second_author: AuthorRecord
+    ) -> AuthorRecord:
         if (
             first_author.author_id
             <=
