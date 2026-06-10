@@ -35,23 +35,32 @@ class NameMatcher:
             for token in tokens
         ]
 
-        expanded_tokens = []
-
-        for token in normalized_tokens:
-            if (
-                len(token) == 2
-                and token.isalpha()
-                and token.isupper() is False
-            ):
-                expanded_tokens.extend(list(token))
-            else:
-                expanded_tokens.append(token)
+        normalized_tokens = NameMatcher._expand_grouped_initials(
+            normalized_tokens
+        )
 
         return [
             token
-            for token in expanded_tokens
+            for token in normalized_tokens
             if token not in NameMatcher.PARTICLES
         ]
+
+    @staticmethod
+    def _expand_grouped_initials(
+        tokens: list[str]
+    ) -> list[str]:
+        if len(tokens) != 2:
+            return tokens
+
+        first_token = tokens[0]
+
+        if len(first_token) <= 1:
+            return tokens
+
+        if not first_token.isalpha():
+            return tokens
+
+        return list(first_token) + [tokens[1]]
 
     @staticmethod
     def _same_tokens_or_initials(
@@ -61,7 +70,10 @@ class NameMatcher:
         if len(tokens_a) != len(tokens_b):
             return False
 
-        for token_a, token_b in zip(tokens_a, tokens_b):
+        for token_a, token_b in zip(
+            tokens_a,
+            tokens_b
+        ):
             if token_a == token_b:
                 continue
 
