@@ -9,6 +9,18 @@ class NameMatcher:
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
+        if NameMatcher._matches_grouped_initials(
+            tokens_a,
+            tokens_b
+        ):
+            return True
+
+        if NameMatcher._matches_grouped_initials(
+            tokens_b,
+            tokens_a
+        ):
+            return True
+
         return (
             NameMatcher._same_tokens_or_initials(
                 tokens_a,
@@ -35,10 +47,6 @@ class NameMatcher:
             for token in tokens
         ]
 
-        normalized_tokens = NameMatcher._expand_grouped_initials(
-            normalized_tokens
-        )
-
         return [
             token
             for token in normalized_tokens
@@ -46,21 +54,32 @@ class NameMatcher:
         ]
 
     @staticmethod
-    def _expand_grouped_initials(
-        tokens: list[str]
-    ) -> list[str]:
-        if len(tokens) != 2:
-            return tokens
+    def _matches_grouped_initials(
+        abbreviated_tokens: list[str],
+        full_name_tokens: list[str]
+    ) -> bool:
+        if len(abbreviated_tokens) != 2:
+            return False
 
-        first_token = tokens[0]
+        grouped_initials = abbreviated_tokens[0]
+        surname = abbreviated_tokens[1]
 
-        if len(first_token) <= 1:
-            return tokens
+        if surname != full_name_tokens[-1]:
+            return False
 
-        if not first_token.isalpha():
-            return tokens
+        full_given_names = full_name_tokens[:-1]
 
-        return list(first_token) + [tokens[1]]
+        if len(grouped_initials) != len(full_given_names):
+            return False
+
+        for initial, full_name in zip(
+            grouped_initials,
+            full_given_names
+        ):
+            if not full_name.startswith(initial):
+                return False
+
+        return True
 
     @staticmethod
     def _same_tokens_or_initials(
