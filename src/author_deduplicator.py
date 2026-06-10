@@ -8,33 +8,44 @@ class AuthorDeduplicator:
         deduplicated_authors = []
 
         for author in authors:
-            duplicate_index = (
-                AuthorDeduplicator._find_duplicate(
-                    author,
-                    deduplicated_authors
-                )
+            AuthorDeduplicator._add_author(
+                author,
+                deduplicated_authors
             )
 
-            if duplicate_index == -1:
-                deduplicated_authors.append(author)
-            else:
-                existing_author = (
-                    deduplicated_authors[
-                        duplicate_index
-                    ]
-                )
-
-                deduplicated_authors[
-                    duplicate_index
-                ] = (
-                    AuthorDeduplicator
-                    ._author_with_smallest_id(
-                        existing_author,
-                        author
-                    )
-                )
-
         return deduplicated_authors
+
+    @staticmethod
+    def _add_author(
+        author,
+        deduplicated_authors
+    ):
+        duplicate_index = (
+            AuthorDeduplicator._find_duplicate(
+                author,
+                deduplicated_authors
+            )
+        )
+
+        if duplicate_index == -1:
+            deduplicated_authors.append(author)
+            return
+
+        existing_author = (
+            deduplicated_authors[
+                duplicate_index
+            ]
+        )
+
+        deduplicated_authors[
+            duplicate_index
+        ] = (
+            AuthorDeduplicator
+            ._author_with_smallest_id(
+                existing_author,
+                author
+            )
+        )
 
     @staticmethod
     def _find_duplicate(
