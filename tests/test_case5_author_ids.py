@@ -22,3 +22,23 @@ def test_duplicate_authors_keep_only_one_record():
     )
 
     assert len(deduplicated_authors) == 1
+
+
+@pytest.mark.case5
+def test_duplicate_authors_keep_smallest_identifier():
+    authors = [
+        AuthorRecord(
+            10,
+            "AM Seabra"
+        ),
+        AuthorRecord(
+            5,
+            "Ana de Mattos Seabra"
+        )
+    ]
+
+    deduplicated_authors = AuthorDeduplicator.deduplicate(
+        authors
+    )
+
+    assert deduplicated_authors[0].author_id == 5
