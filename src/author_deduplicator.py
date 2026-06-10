@@ -15,6 +15,13 @@ class AuthorDeduplicator:
             first_author.name,
             second_author.name
         ):
-            return [first_author]
+            if (
+                first_author.author_id
+                <=
+                second_author.author_id
+            ):
+                return [first_author]
+
+            return [second_author]
 
         return authors
