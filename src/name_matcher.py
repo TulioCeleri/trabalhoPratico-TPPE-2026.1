@@ -7,7 +7,10 @@ class NameMatcher:
         tokens_a = NameMatcher._tokens_without_particles(name_a)
         tokens_b = NameMatcher._tokens_without_particles(name_b)
 
-        if tokens_a == tokens_b:
+        if NameMatcher._same_tokens_or_initials(
+            tokens_a,
+            tokens_b
+        ):
             return True
 
         if NameMatcher._matches_surname_with_initials(
@@ -38,6 +41,31 @@ class NameMatcher:
             for token in normalized_tokens
             if token not in NameMatcher.PARTICLES
         ]
+
+    @staticmethod
+    def _same_tokens_or_initials(
+        tokens_a: list[str],
+        tokens_b: list[str]
+    ) -> bool:
+        if len(tokens_a) != len(tokens_b):
+            return False
+
+        for token_a, token_b in zip(
+            tokens_a,
+            tokens_b
+        ):
+            if token_a == token_b:
+                continue
+
+            if len(token_a) == 1 and token_b.startswith(token_a):
+                continue
+
+            if len(token_b) == 1 and token_a.startswith(token_b):
+                continue
+
+            return False
+
+        return True
 
     @staticmethod
     def _matches_surname_with_initials(
