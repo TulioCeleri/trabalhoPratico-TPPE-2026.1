@@ -2,6 +2,30 @@ from src.author_record import AuthorRecord
 from src.name_matcher import NameMatcher
 
 
+class AddAuthorCommand:
+    def __init__(self, author: AuthorRecord, deduplicated_authors: list[AuthorRecord]):
+        self.author = author
+        self.deduplicated_authors = deduplicated_authors
+
+    def execute(self) -> None:
+        duplicate_index = AuthorDeduplicator._find_duplicate(
+            self.author,
+            self.deduplicated_authors
+        )
+
+        if duplicate_index == -1:
+            self.deduplicated_authors.append(self.author)
+            return
+
+        existing_author = self.deduplicated_authors[duplicate_index]
+
+        self.deduplicated_authors[duplicate_index] = (
+            AuthorDeduplicator._author_with_smallest_id(
+                existing_author,
+                self.author
+            )
+        )
+
 class AuthorDeduplicator:
 
     @staticmethod
@@ -23,32 +47,11 @@ class AuthorDeduplicator:
         author: AuthorRecord,
         deduplicated_authors: list[AuthorRecord]
     ) -> None:
-        duplicate_index = (
-            AuthorDeduplicator._find_duplicate(
-                author,
-                deduplicated_authors
-            )
+        command = AddAuthorCommand(
+            author,
+            deduplicated_authors
         )
-
-        if duplicate_index == -1:
-            deduplicated_authors.append(author)
-            return
-
-        existing_author = (
-            deduplicated_authors[
-                duplicate_index
-            ]
-        )
-
-        deduplicated_authors[
-            duplicate_index
-        ] = (
-            AuthorDeduplicator
-            ._author_with_smallest_id(
-                existing_author,
-                author
-            )
-        )
+        command.execute()
 
     @staticmethod
     def _find_duplicate(
