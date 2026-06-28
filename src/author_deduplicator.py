@@ -71,11 +71,14 @@ class AuthorDeduplicator:
         first_author: AuthorRecord,
         second_author: AuthorRecord
     ) -> AuthorRecord:
-        if (
-            first_author.author_id
-            <=
-            second_author.author_id
-        ):
+        if AuthorDeduplicator._is_id_smaller_or_equal(first_author, second_author):
             return first_author
 
         return second_author
+
+    @staticmethod
+    def _is_id_smaller_or_equal(
+        first_author: AuthorRecord,
+        second_author: AuthorRecord
+    ) -> bool:
+        return first_author.author_id <= second_author.author_id
