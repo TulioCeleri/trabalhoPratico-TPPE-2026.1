@@ -1,13 +1,17 @@
+from src.name_tokenizer import NameTokenizer
+
+
 class NameMatcher:
 
     PARTICLES = {"de", "da", "do", "dos", "das"}
 
     @staticmethod
     def are_equivalent(name_a: str, name_b: str) -> bool:
+
         NameMatcher._validate_names(name_a, name_b)
 
-        tokens_a = NameMatcher._tokens_without_particles(name_a)
-        tokens_b = NameMatcher._tokens_without_particles(name_b)
+        tokens_a = NameTokenizer.tokens_without_particles(name_a)
+        tokens_b = NameTokenizer.tokens_without_particles(name_b)
 
         if NameMatcher._matches_grouped_initials_in_any_order(
             tokens_a,
